@@ -1,0 +1,19 @@
+package org.example.repositories.implementations.AdminTasks;
+
+import org.example.Dao.Dao;
+
+import java.util.HashMap;
+
+public class TypesRepository extends Dao {
+
+    public int createPaymentMethod(String name) {
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("name", name);
+
+        return insertData("Espacetypes", data);
+    }
+
+    public int deletePaymentMethod(String name) {
+        return deleteData("Espacetypes", "name", name);
+    }
+}
