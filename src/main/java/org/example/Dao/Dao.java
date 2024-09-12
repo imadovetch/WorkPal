@@ -3,7 +3,9 @@ package org.example.Dao;
 import org.example.config.PostgreSQLConnection;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Dao {
@@ -15,11 +17,10 @@ public class Dao {
     }
 
     // Method to fetch data from the database
-    public HashMap<String, Object> fetchData(String table, String conditionColumn, String conditionValue) {
-        HashMap<String, Object> resultData = new HashMap<>();
+    public List<HashMap<String, Object>> fetchData(String table, String conditionColumn, String conditionValue) {
+        List<HashMap<String, Object>> resultDataList = new ArrayList<>();
         String query;
 
-        // Prepare the SQL query based on whether a condition is present or not
         if (conditionValue == null) {
             query = "SELECT * FROM " + table;
         } else {
@@ -29,13 +30,20 @@ public class Dao {
         // Execute the query
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             if (conditionValue != null) {
-                stmt.setString(1, conditionValue);
+                if (!conditionColumn.contains("creatorid")) {
+                    stmt.setString(1, conditionValue);
+                    System.out.println("Setting condition value as string...");
+                } else {
+                    System.out.println("Setting condition value as integer...");
+                    stmt.setInt(1, 1);
+                }
             }
 
             ResultSet rs = stmt.executeQuery();
             ResultSetMetaData metaData = rs.getMetaData();
             int columnCount = metaData.getColumnCount();
 
+            // Loop through all the result set rows
             while (rs.next()) {
                 HashMap<String, Object> rowData = new HashMap<>();
                 for (int i = 1; i <= columnCount; i++) {
@@ -43,14 +51,15 @@ public class Dao {
                     Object columnValueResult = rs.getObject(i);
                     rowData.put(columnName, columnValueResult);
                 }
-                resultData.putAll(rowData);
+                resultDataList.add(rowData); // Add each row to the list
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return resultData;
+        return resultDataList;
     }
+
 
 
     public int insertData(String table, HashMap<String, Object> data) {

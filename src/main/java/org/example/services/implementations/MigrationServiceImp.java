@@ -59,13 +59,81 @@ public class MigrationServiceImp implements MigrationServiceInterface {
             e.printStackTrace();
         }
     }
+    public void migrateEspace() throws SQLException {
+        Connection connection = PostgreSQLConnection.getInstance().getConnection();
+        String createTableSQL = "CREATE TABLE IF NOT EXISTS Espace (" +
+                "id SERIAL PRIMARY KEY, " +
+                "Type VARCHAR(255) NOT NULL, " +
+                "creatorid INT NOT NULL, " +
+                "description VARCHAR(255) NOT NULL, " +
+                "name VARCHAR(255) NOT NULL" +
+                ");";
 
+        try (Statement statement = connection.createStatement()) {
+            statement.execute(createTableSQL);
+            System.out.println("Table 'Espace' created successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public void migrateServices() throws SQLException {
+        Connection connection = PostgreSQLConnection.getInstance().getConnection();
+        String createTableSQL = "CREATE TABLE IF NOT EXISTS services (" +
+                "id SERIAL PRIMARY KEY, " +
+                "creatorid INT NOT NULL, " +
+                "description VARCHAR(255) NOT NULL, " +
+                "name VARCHAR(255) NOT NULL" +
+                ");";
+
+        try (Statement statement = connection.createStatement()) {
+            statement.execute(createTableSQL);
+            System.out.println("Table 'Espace' created successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public void migrateAbonnment() throws SQLException {
+        Connection connection = PostgreSQLConnection.getInstance().getConnection();
+        String createTableSQL = "CREATE TABLE IF NOT EXISTS Abonnments (" +
+                "id SERIAL PRIMARY KEY, " +
+                "spaceId INT NOT NULL, " +
+                "description VARCHAR(255) NOT NULL, " +
+                "name VARCHAR(255) NOT NULL," +
+                "price VARCHAR(255) NOT NULL" +
+                ");";
+
+        try (Statement statement = connection.createStatement()) {
+            statement.execute(createTableSQL);
+            System.out.println("Table 'Espace' created successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void EspaceService() throws SQLException {
+        Connection connection = PostgreSQLConnection.getInstance().getConnection();
+        String createTableSQL = "CREATE TABLE IF NOT EXISTS EspaceServices (" +
+                "id SERIAL PRIMARY KEY, " +
+                "spaceId INT NOT NULL, " +
+                "serviceid INT NOT NULL " +
+                ");";
+
+        try (Statement statement = connection.createStatement()) {
+            statement.execute(createTableSQL);
+            System.out.println("Table 'Espace' created successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void Main() throws SQLException {
         this.migrateUsersTable();
         this.migratePaymentMethodsTable();
         this.migrateEspacetypesTable();
-
+        this.migrateEspace();
+        this.migrateAbonnment();
+        this.migrateServices();
+        this.EspaceService();
     }
 
 

@@ -1,20 +1,24 @@
 package org.example.repositories.implementations;
 
 import org.example.Dao.Dao;
+import org.example.entities.User;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class UserRepositoryImp extends Dao {
 
+    // Register a new user
     public void register(String email, String password, String phone) {
-        HashMap<String, Object> firstUserCheck = fetchData("users", null, null);
+        List<HashMap<String, Object>> existingUserCheck = fetchData("users", "email", email);
 
-        String role;
-        if (firstUserCheck.isEmpty()) {
-            role = "Admin";
-        } else {
-            role = "Member";
+        if (!existingUserCheck.isEmpty()) {
+            System.out.println("Email is already registered.");
+            return;
         }
+
+        List<HashMap<String, Object>> firstUserCheck = fetchData("users", null, null);
+        String role = firstUserCheck.isEmpty() ? "Admin" : "Member";
 
         HashMap<String, Object> userData = new HashMap<>();
         userData.put("email", email);
@@ -30,14 +34,23 @@ public class UserRepositoryImp extends Dao {
         }
     }
 
-    public boolean login(String email, String password) {
-        HashMap<String, Object> user = fetchData("users", "email", email);
 
-        if (!user.isEmpty()) {
+    // Login functionality
+    public boolean login(String email, String password) {
+        List<HashMap<String, Object>> users = fetchData("users", "email", email);
+
+        if (!users.isEmpty()) {
+            HashMap<String, Object> user = users.get(0); // Get the first user with matching email
             String storedPassword = (String) user.get("password");
 
             if (storedPassword.equals(password)) {
                 System.out.println("Login successful.");
+                User.Main = new User(
+                        (Integer) user.get("id"),
+                        user.get("email").toString(),
+                        user.get("phone").toString(),
+                        user.get("role").toString()
+                );
                 return true;
             } else {
                 System.out.println("Invalid password.");
@@ -49,24 +62,27 @@ public class UserRepositoryImp extends Dao {
         return false;
     }
 
-    public HashMap<String, Object> fetchUsers() {
-        HashMap<String, Object> users = fetchData("users", null, null);
+    // Fetch and display all users
+    public List<HashMap<String, Object>> fetchUsers() {
+        List<HashMap<String, Object>> users = fetchData("users", null, null);
 
         if (!users.isEmpty()) {
             System.out.println("List of Users:");
-            users.forEach((key, value) -> {
-                System.out.println(key + ": " + value);
-            });
+            for (HashMap<String, Object> user : users) {
+                System.out.println("ID: " + user.get("id") + ", Email: " + user.get("email") + ", Phone: " + user.get("phone") + ", Role: " + user.get("role"));
+            }
         } else {
             System.out.println("No users found.");
         }
         return users;
     }
 
+    // Update user role
     public void updateUserRole(String email) {
-        HashMap<String, Object> user = fetchData("users", "email", email);
+        List<HashMap<String, Object>> users = fetchData("users", "email", email);
 
-        if (!user.isEmpty()) {
+        if (!users.isEmpty()) {
+            HashMap<String, Object> user = users.get(0); // Get the first user with matching email
             String currentRole = (String) user.get("role");
             String newRole = "Member".equals(currentRole) ? "Manager" : "Member";
 

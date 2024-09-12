@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.GUI.MainGUI;
 import org.example.repositories.implementations.UserRepositoryImp;
 import org.example.services.implementations.MigrationServiceImp;
 
@@ -15,10 +16,13 @@ public class Main {
 
 
     try{
-         //new MigrationServiceImp().Main();
-//        UserRepositoryImp userRepository = new UserRepositoryImp();
+        new MigrationServiceImp().Main();
+
+      new MainGUI();
+       UserRepositoryImp userRepository = new UserRepositoryImp();
 //
-//        userRepository.register("jane@example.com", "password456", "987654321");
+  //  userRepository.register("jane@example.com", "password456", "987654321");
+     //   userRepository.login("jane@example.com", "password456");
 //        boolean isLoggedIn = userRepository.login("john@example.com", "password123");
 //        HashMap<String, Object> users = userRepository.fetchUsers();
 //
