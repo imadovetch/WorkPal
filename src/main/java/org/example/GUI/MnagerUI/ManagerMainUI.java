@@ -64,11 +64,11 @@ public class ManagerMainUI {
 
                     System.out.print("Enter the name of the space: ");
                     String name = scanner.nextLine();
-                    new TypesRepository().ShowTypes();
+                    new TypesRepository().showTypes();
                     System.out.print("Enter the type of the space: ");
                     String type = scanner.nextLine();
 
-                    int spaceCreation = new SpacesRepository().createspace(name, type, description);
+                    int spaceCreation = new SpacesRepository().createSpace(name, type, description);
                     if (spaceCreation > 0) {
                         System.out.println("Space created successfully.");
                     } else {
@@ -78,9 +78,9 @@ public class ManagerMainUI {
                 case 2:
 
                     System.out.print("Enter the name of the space to delete: ");
-                    new SpacesRepository().GetManagerSpaces();
+                    new SpacesRepository().getManagerSpaces();
                     name = scanner.nextLine();
-                    spaceCreation = new SpacesRepository().deletespace(name);
+                    spaceCreation = new SpacesRepository().deleteSpace(name);
                     if (spaceCreation > 0) {
                         System.out.println("Space deleted successfully.");
                     } else {
@@ -90,7 +90,7 @@ public class ManagerMainUI {
                 case 3:
                     System.out.println("Modifying a space...");
 
-                        new SpacesRepository().GetManagerSpaces();
+                        new SpacesRepository().getManagerSpaces();
 
 
                     System.out.print("Enter the name of the space to modify: ");
@@ -99,7 +99,7 @@ public class ManagerMainUI {
                     System.out.print("Enter the new description: ");
                     description = scanner.nextLine();
 
-                    spaceCreation = new SpacesRepository().modifyspace(name, description);
+                    spaceCreation = new SpacesRepository().modifySpace(name, description);
                     if (spaceCreation > 0) {
                         System.out.println("Space modified successfully.");
                     } else {
@@ -147,7 +147,7 @@ public class ManagerMainUI {
                     break;
                 case 2:
                     System.out.print("Enter the name of the Abonnement to delete: ");
-                    new AbonnmentRepository().GetManagerAbonments();
+                    new AbonnmentRepository().getManagerAbonnments();
                     String delName = scanner.nextLine();
                     result = new AbonnmentRepository().deleteAbonnment(delName);
                     if (result > 0) {
@@ -183,7 +183,7 @@ public class ManagerMainUI {
                     System.out.print("Enter a description for the service: ");
                     String description = scanner.nextLine();
 
-                    int result = new ServiceRepository().createservice(name, description);
+                    int result = new ServiceRepository().createService(name, description);
                     if (result > 0) {
                         System.out.println("Service created successfully.");
                     } else {
@@ -193,15 +193,15 @@ public class ManagerMainUI {
                 case 2:
                     System.out.println("Assigning a service...");
                     System.out.println("Your Services...");
-                    new ServiceRepository().GetManagerservices();
+                    new ServiceRepository().getManagerServices();
                     System.out.println("Your Spaces...");
-                    new SpacesRepository().GetManagerSpaces();
+                    new SpacesRepository().getManagerSpaces();
 
                     System.out.println("Enterspaceid...");  //   validation later
                     int spaceId = scanner.nextInt();
                     System.out.println("Enterserviceid...");
                     int serviceId = scanner.nextInt();
-                    result = new SpacesRepository().AssignService(spaceId, serviceId);
+                    result = new SpacesRepository().assignService(spaceId, serviceId);
 
                     break;
                 case 3:
@@ -209,10 +209,10 @@ public class ManagerMainUI {
                     System.out.print("Enter the name of the service: ");
                     String delname = scanner.nextLine();
 
-                    result = new ServiceRepository().deleteservice(delname);
+                    result = new ServiceRepository().deleteService(delname);
                     break;
                 case 4:
-                    return; // Go back to main menu
+                    return;
                 default:
                     System.out.println("Invalid option. Please try again.");
             }

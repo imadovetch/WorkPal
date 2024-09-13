@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class PostgreSQLConnection {
 
-    private final String url = "jdbc:postgresql://localhost:5432/WorkPal";
+    private final String url = "jdbc:postgresql://localhost:5432/WorkPalv2";
     private final String user = "postgres";
     private final String password = "1111";
 

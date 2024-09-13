@@ -1,6 +1,7 @@
 package org.example.Dao;
 
 import org.example.config.PostgreSQLConnection;
+import org.example.entities.User;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class Dao {
                     System.out.println("Setting condition value as string...");
                 } else {
                     System.out.println("Setting condition value as integer...");
-                    stmt.setInt(1, 1);
+                    stmt.setInt(1, User.Main.getId());
                 }
             }
 
@@ -60,6 +61,38 @@ public class Dao {
         return resultDataList;
     }
 
+    public List<HashMap<String, Object>> fetchData(String table, String conditionColumn, int conditionValue) {
+        List<HashMap<String, Object>> resultDataList = new ArrayList<>();
+        String query;
+
+
+            query = "SELECT * FROM " + table + " WHERE " + conditionColumn + " = ?";
+
+
+        // Execute the query
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, conditionValue);
+
+            ResultSet rs = stmt.executeQuery();
+            ResultSetMetaData metaData = rs.getMetaData();
+            int columnCount = metaData.getColumnCount();
+
+            // Loop through all the result set rows
+            while (rs.next()) {
+                HashMap<String, Object> rowData = new HashMap<>();
+                for (int i = 1; i <= columnCount; i++) {
+                    String columnName = metaData.getColumnName(i);
+                    Object columnValueResult = rs.getObject(i);
+                    rowData.put(columnName, columnValueResult);
+                }
+                resultDataList.add(rowData); // Add each row to the list
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return resultDataList;
+    }
 
 
     public int insertData(String table, HashMap<String, Object> data) {

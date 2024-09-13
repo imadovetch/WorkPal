@@ -19,9 +19,9 @@ public class TypesRepository extends Dao {
     public int deleteType(String name) {
         return deleteData("Espacetypes", "name", name);
     }
-    public void ShowTypes() {
 
-        List<HashMap<String, Object>> results = (List<HashMap<String, Object>>) fetchData("Espacetypes",null,null);;
+    public void showTypes() {
+        List<HashMap<String, Object>> results = (List<HashMap<String, Object>>) fetchData("Espacetypes", null, null);
 
         if (Types.Types == null) {
             Types.Types = new ArrayList<>();
@@ -36,9 +36,15 @@ public class TypesRepository extends Dao {
             System.out.println(row.get("name"));
             Types.Types.add(type);
         }
-
     }
 
-
-
+    // New method to get type ID by name
+    public Integer getTypeIdByName(String name) {
+        for (Types type : Types.Types) {
+            if (type.getName().equalsIgnoreCase(name)) {
+                return type.getId();
+            }
+        }
+        return null; // Return null if the type is not found
+    }
 }

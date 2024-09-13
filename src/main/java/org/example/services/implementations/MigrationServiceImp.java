@@ -9,132 +9,92 @@ import java.sql.Statement;
 
 public class MigrationServiceImp implements MigrationServiceInterface {
 
+    // Helper method to execute all migrations in one SQL query
+    public void migrateAllTables() {
+        Connection connection = null;
+        Statement statement = null;
+        try {
+            connection = PostgreSQLConnection.getInstance().getConnection();
+            statement = connection.createStatement();
 
-    public void migrateUsersTable() throws SQLException {
-        Connection connection = PostgreSQLConnection.getInstance().getConnection();
-        String createTableSQL = "CREATE TABLE IF NOT EXISTS users (" +
-                "id SERIAL PRIMARY KEY, " +
-                "email VARCHAR(255) NOT NULL UNIQUE, " +
-                "password VARCHAR(255) NOT NULL, " +
-                "phone VARCHAR(20), " + // Nullable phone field
-                "role VARCHAR(50) NOT NULL" + // Role field
-                ");";
+            // Combine all table creation queries into a single query
+            String createAllTablesSQL =
+                    "CREATE TABLE IF NOT EXISTS users (" +
+                            "id SERIAL PRIMARY KEY, " +
+                            "email VARCHAR(255) NOT NULL UNIQUE, " +
+                            "name VARCHAR(255)  UNIQUE, " +
+                            "password VARCHAR(255) NOT NULL, " +
+                            "phone VARCHAR(20)); " +
 
-        try (Statement statement = connection.createStatement()) {
-            statement.execute(createTableSQL);
-            System.out.println("Table 'users' created successfully.");
+                            "CREATE TABLE IF NOT EXISTS admins (" +
+
+                            ") INHERITS (users); " +
+
+                            "CREATE TABLE IF NOT EXISTS members (" +
+
+                            ") INHERITS (users); " +
+
+                            "CREATE TABLE IF NOT EXISTS managers (" +
+
+                            "PRIMARY KEY (id) " +  // Explicit primary key for managers
+                            ") INHERITS (users); " +
+
+                            "CREATE TABLE IF NOT EXISTS PaymentMethods (" +
+                            "id SERIAL PRIMARY KEY, " +
+                            "name VARCHAR(255) NOT NULL); " +
+
+                            "CREATE TABLE IF NOT EXISTS Espacetypes (" +
+                            "id SERIAL PRIMARY KEY, " +
+                            "name VARCHAR(255) NOT NULL UNIQUE); " +
+
+                            "CREATE TABLE IF NOT EXISTS Espace (" +
+                            "id SERIAL PRIMARY KEY, " +
+                            "typeid INT NOT NULL, " +
+                            "creatorid INT NOT NULL, " +
+                            "description VARCHAR(255) NOT NULL, " +
+                            "name VARCHAR(255) NOT NULL UNIQUE, " +
+                            "CONSTRAINT fk_creator FOREIGN KEY (creatorid) REFERENCES managers(id) ON DELETE CASCADE, " +  // Corrected foreign key reference
+                            "CONSTRAINT fk_type FOREIGN KEY (typeid) REFERENCES Espacetypes(id) ON DELETE CASCADE); " +
+
+                            "CREATE TABLE IF NOT EXISTS services (" +
+                            "id SERIAL PRIMARY KEY, " +
+                            "creatorid INT NOT NULL, " +
+                            "description VARCHAR(255) NOT NULL, " +
+                            "name VARCHAR(255) NOT NULL UNIQUE, " +
+                            "CONSTRAINT fk_creator_service FOREIGN KEY (creatorid) REFERENCES managers(id) ON DELETE CASCADE); " +
+
+                            "CREATE TABLE IF NOT EXISTS Abonnments (" +
+                            "id SERIAL PRIMARY KEY, " +
+                            "spaceId INT NOT NULL, " +
+                            "description VARCHAR(255) NOT NULL, " +
+                            "name VARCHAR(255) NOT NULL UNIQUE, " +
+                            "price VARCHAR(255) NOT NULL, " +
+                            "CONSTRAINT fk_space FOREIGN KEY (spaceId) REFERENCES Espace(id) ON DELETE CASCADE); " +
+
+                            "CREATE TABLE IF NOT EXISTS EspaceServices (" +
+                            "id SERIAL PRIMARY KEY, " +
+                            "spaceId INT NOT NULL, " +
+                            "serviceId INT NOT NULL, " +
+                            "CONSTRAINT fk_space_service FOREIGN KEY (spaceId) REFERENCES Espace(id) ON DELETE CASCADE, " +
+                            "CONSTRAINT fk_service FOREIGN KEY (serviceId) REFERENCES services(id) ON DELETE CASCADE);";
+
+            // Execute the combined SQL query
+            statement.execute(createAllTablesSQL);
+            System.out.println("All tables created successfully.");
+
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    // Method to migrate the 'PaymentMethods' table
-    public void migratePaymentMethodsTable() throws SQLException {
-        Connection connection = PostgreSQLConnection.getInstance().getConnection();
-        String createTableSQL = "CREATE TABLE IF NOT EXISTS PaymentMethods (" +
-                "id SERIAL PRIMARY KEY, " +
-                "name VARCHAR(255) NOT NULL" +
-                ");";
-
-        try (Statement statement = connection.createStatement()) {
-            statement.execute(createTableSQL);
-            System.out.println("Table 'PaymentMethods' created successfully.");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void Main() {
+        migrateAllTables();
     }
-
-    // Method to migrate the 'Espacetypes' table
-    public void migrateEspacetypesTable() throws SQLException {
-        Connection connection = PostgreSQLConnection.getInstance().getConnection();
-        String createTableSQL = "CREATE TABLE IF NOT EXISTS Espacetypes (" +
-                "id SERIAL PRIMARY KEY, " +
-                "name VARCHAR(255) NOT NULL" + // Name of space type
-                ");";
-
-        try (Statement statement = connection.createStatement()) {
-            statement.execute(createTableSQL);
-            System.out.println("Table 'Espacetypes' created successfully.");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    public void migrateEspace() throws SQLException {
-        Connection connection = PostgreSQLConnection.getInstance().getConnection();
-        String createTableSQL = "CREATE TABLE IF NOT EXISTS Espace (" +
-                "id SERIAL PRIMARY KEY, " +
-                "Type VARCHAR(255) NOT NULL, " +
-                "creatorid INT NOT NULL, " +
-                "description VARCHAR(255) NOT NULL, " +
-                "name VARCHAR(255) NOT NULL" +
-                ");";
-
-        try (Statement statement = connection.createStatement()) {
-            statement.execute(createTableSQL);
-            System.out.println("Table 'Espace' created successfully.");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    public void migrateServices() throws SQLException {
-        Connection connection = PostgreSQLConnection.getInstance().getConnection();
-        String createTableSQL = "CREATE TABLE IF NOT EXISTS services (" +
-                "id SERIAL PRIMARY KEY, " +
-                "creatorid INT NOT NULL, " +
-                "description VARCHAR(255) NOT NULL, " +
-                "name VARCHAR(255) NOT NULL" +
-                ");";
-
-        try (Statement statement = connection.createStatement()) {
-            statement.execute(createTableSQL);
-            System.out.println("Table 'Espace' created successfully.");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    public void migrateAbonnment() throws SQLException {
-        Connection connection = PostgreSQLConnection.getInstance().getConnection();
-        String createTableSQL = "CREATE TABLE IF NOT EXISTS Abonnments (" +
-                "id SERIAL PRIMARY KEY, " +
-                "spaceId INT NOT NULL, " +
-                "description VARCHAR(255) NOT NULL, " +
-                "name VARCHAR(255) NOT NULL," +
-                "price VARCHAR(255) NOT NULL" +
-                ");";
-
-        try (Statement statement = connection.createStatement()) {
-            statement.execute(createTableSQL);
-            System.out.println("Table 'Espace' created successfully.");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void EspaceService() throws SQLException {
-        Connection connection = PostgreSQLConnection.getInstance().getConnection();
-        String createTableSQL = "CREATE TABLE IF NOT EXISTS EspaceServices (" +
-                "id SERIAL PRIMARY KEY, " +
-                "spaceId INT NOT NULL, " +
-                "serviceid INT NOT NULL " +
-                ");";
-
-        try (Statement statement = connection.createStatement()) {
-            statement.execute(createTableSQL);
-            System.out.println("Table 'Espace' created successfully.");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void Main() throws SQLException {
-        this.migrateUsersTable();
-        this.migratePaymentMethodsTable();
-        this.migrateEspacetypesTable();
-        this.migrateEspace();
-        this.migrateAbonnment();
-        this.migrateServices();
-        this.EspaceService();
-    }
-
-
 }
