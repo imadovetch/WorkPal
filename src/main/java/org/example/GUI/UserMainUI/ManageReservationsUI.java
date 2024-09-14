@@ -42,8 +42,8 @@ public class ManageReservationsUI {
         System.out.println("Canceling a reservation...");
         // Logic to cancel a reservation
         System.out.print("Enter reservation ID to cancel: ");
-        String reservationId = scanner.nextLine();
-        // Call to repository or service to cancel the reservation
+        int reservationId = Integer.parseInt(scanner.nextLine());
+        new ReservationsRepository().deleteReservation(reservationId);
         System.out.println("Reservation canceled successfully.");
     }
 }
