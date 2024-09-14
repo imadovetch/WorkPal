@@ -1,7 +1,6 @@
-package org.example.GUI.UserMainUI;
+package org.example.services.implementations;
 
 import org.example.entities.User;
-import org.example.services.implementations.EmailServiceImp;
 
 public class Notification {
 
@@ -70,6 +69,6 @@ public class Notification {
 
     // Helper method to send emails
     private void sendEmail(String context, String senderEmail) {
-        new EmailServiceImp().main(context, senderEmail);
+        new EmailServiceImp().main(senderEmail,context);
     }
 }

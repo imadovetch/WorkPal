@@ -1,8 +1,6 @@
 package org.example.services.implementations;
 
 
-import org.example.GUI.UserMainUI.Notification;
-
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;

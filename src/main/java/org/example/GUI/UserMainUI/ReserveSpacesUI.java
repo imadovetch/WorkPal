@@ -103,6 +103,11 @@ public class ReserveSpacesUI {
         String reservationName = scanner.nextLine();
         System.out.println("Viewing details for reservation: " + reservationName);
     }
+    private void cancelRev(int id) {
+        System.out.print("\nEnter the reservation name to view details: ");
+        String reservationName = scanner.nextLine();
+        System.out.println("Viewing details for reservation: " + reservationName);
+    }
 
     private void saveFavoriteSpaces() {
         new Helpers().ShowData("Espace");
