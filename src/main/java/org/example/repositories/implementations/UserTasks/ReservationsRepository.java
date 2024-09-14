@@ -63,7 +63,7 @@ public class ReservationsRepository extends Dao {
 
 
     public int deleteReservation(int reservationId) {
-        return deleteData(TABLE_NAME, "id", String.valueOf(reservationId));
+        return deleteData(TABLE_NAME, "id", reservationId);
     }
 
 

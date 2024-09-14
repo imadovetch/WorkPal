@@ -1,5 +1,7 @@
 package org.example.GUI.UserMainUI;
 
+import org.example.repositories.implementations.UserRepositoryImp;
+
 import java.util.Scanner;
 
 public class ManageProfileUI {
@@ -10,7 +12,7 @@ public class ManageProfileUI {
         while (true) {
             System.out.println("Manage Profile");
             System.out.println("1. Update Personal Information");
-            System.out.println("2. Add/Update Profile Photo (Optional)");
+
             System.out.println("3. Back to Main Menu");
 
             int choice = UserMainUI.getChoice();
@@ -19,9 +21,7 @@ public class ManageProfileUI {
                 case 1:
                     updatePersonalInformation();
                     break;
-                case 2:
-                    addProfilePhoto();
-                    break;
+
                 case 3:
                     return; // Go back to main menu
                 default:
@@ -33,11 +33,10 @@ public class ManageProfileUI {
     private void updatePersonalInformation() {
         System.out.println("Updating personal information...");
         // Logic to update address and phone number
-        System.out.print("Enter new address: ");
-        String address = scanner.nextLine();
-        System.out.print("Enter new phone number: ");
+
+        System.out.print("Enter new password: ");
         String phoneNumber = scanner.nextLine();
-        // Call to repository or service to update the information
+        new UserRepositoryImp().updateUserPass(phoneNumber);
         System.out.println("Personal information updated successfully.");
     }
 

@@ -9,9 +9,9 @@ public class ManageSubscriptionsUI {
     public void display() {
         while (true) {
             System.out.println("Manage Subscriptions");
-            System.out.println("1. Choose/Subscribe to a Plan");
-            System.out.println("2. Renew or Update Subscription");
-            System.out.println("3. Cancel Subscription");
+            System.out.println("1. See service");
+            System.out.println("2. See favorite");
+            System.out.println("3. Cancel service");
             System.out.println("4. Back to Main Menu");
 
             int choice = UserMainUI.getChoice();
@@ -36,6 +36,8 @@ public class ManageSubscriptionsUI {
 
     private void chooseSubscriptionPlan() {
         System.out.println("Choosing a subscription plan...");
+        String reservationName = scanner.nextLine();
+
         // Logic to choose and subscribe to a plan
     }
 

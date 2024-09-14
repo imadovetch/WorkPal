@@ -2,7 +2,8 @@ package org.example.services.implementations;
     import java.util.Properties;
 import javax.mail.*;
 import javax.mail.internet.*;
-
+    import java.time.LocalDateTime;
+    import java.time.format.DateTimeFormatter;
 public class EmailServiceImp {
 
 
@@ -31,7 +32,7 @@ public class EmailServiceImp {
                 message.setFrom(new InternetAddress(from));
                 message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
                 message.setSubject("Email from Java");
-                message.setText(content);
+                message.setText(content + "\n\nSent at: " + getCurrentTimestamp());
 
                 Transport.send(message);
                 System.out.println("Email sent successfully!");
@@ -39,6 +40,10 @@ public class EmailServiceImp {
                 mex.printStackTrace();
             }
         }
-
+    private static String getCurrentTimestamp() {
+        LocalDateTime now = LocalDateTime.now(); // Get current date and time
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); // Define format
+        return now.format(formatter); // Return formatted timestamp
+    }
 
 }

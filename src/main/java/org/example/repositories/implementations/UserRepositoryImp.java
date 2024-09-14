@@ -1,9 +1,14 @@
 package org.example.repositories.implementations;
 
 import org.example.Dao.Dao;
+import org.example.GUI.AdminUI.AdminMainUI;
+import org.example.GUI.ManagerUI.ManagerMainUI;
+import org.example.GUI.UserMainUI.UserMainUI;
 import org.example.entities.User;
+import org.example.services.implementations.EmailServiceImp;
 import org.mindrot.jbcrypt.BCrypt;
 
+import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -78,6 +83,22 @@ public class UserRepositoryImp extends Dao {
                             user.get("phone").toString(),
                             ""
                     );
+                    List<HashMap<String, Object>> admin = fetchData("admins", "email", email);
+                    List<HashMap<String, Object>> managers = fetchData("managers", "email", email);
+                    List<HashMap<String, Object>> members = fetchData("members", "email", email);
+                    if (!admin.isEmpty()) {
+                        AdminMainUI.Display();
+                    }
+
+                    else if (!managers.isEmpty()) {
+                        ManagerMainUI.display();
+                    }
+
+                    else if (!members.isEmpty()) {
+                        UserMainUI.display();
+                    } else {
+                        System.out.println("User role not recognized.");
+                    }
                     return true;
                 } else {
                     System.out.println("Invalid password.");
@@ -149,6 +170,45 @@ public class UserRepositoryImp extends Dao {
         } catch (Exception e) {
             System.out.println("Error updating user role: " + e.getMessage());
         }
+    }
+
+    public void updateUserPass(String password) {
+        HashMap<String, Object> updated = new HashMap<>();
+        updated.put("password", BCrypt.hashpw(password, BCrypt.gensalt()));
+
+        try {
+           updateData("users",updated,"id",User.Main.getId());
+        } catch (Exception e) {
+            System.out.println("Error updating user role: " + e.getMessage());
+        }
+    }
+
+    public void forgetPass(String email) {
+        try {
+
+            String randomPassword = generateRandomPassword();
+
+            HashMap<String, Object> updated = new HashMap<>();
+            updated.put("password", BCrypt.hashpw(randomPassword, BCrypt.gensalt()));
+
+            updateData("users", updated, "email", email);
+
+            EmailServiceImp.main(email, "Your new password is: " + randomPassword);
+            System.out.println("A new password has been sent to " + email);
+
+        } catch (Exception e) {
+            System.out.println("Error during password reset: " + e.getMessage());
+        }
+    }
+    private String generateRandomPassword() {
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%";
+        SecureRandom random = new SecureRandom();
+        StringBuilder password = new StringBuilder(10);
+
+        for (int i = 0; i < 10; i++) {
+            password.append(chars.charAt(random.nextInt(chars.length())));
+        }
+        return password.toString();
     }
 
     private boolean isValidEmail(String email) {

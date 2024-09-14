@@ -124,6 +124,16 @@ public class Dao {
         }
         return 0;
     }
+    public int deleteData(String table, String conditionColumn, int conditionValue) {
+        String query = "DELETE FROM " + table + " WHERE " + conditionColumn + " = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, conditionValue);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
     public int updateData(String table, HashMap<String, Object> data, String conditionColumn, String conditionValue) {
         StringBuilder setClause = new StringBuilder();
 
@@ -137,6 +147,25 @@ public class Dao {
             }
             // Set the condition value
             stmt.setString(index, conditionValue);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    public int updateData(String table, HashMap<String, Object> data, String conditionColumn, int conditionValue) {
+        StringBuilder setClause = new StringBuilder();
+
+        data.forEach((key, value) -> setClause.append(key).append(" = ?,"));
+
+        String query = "UPDATE " + table + " SET " + setClause.substring(0, setClause.length() - 1) + " WHERE " + conditionColumn + " = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            int index = 1;
+            for (Object value : data.values()) {
+                stmt.setObject(index++, value);
+            }
+            // Set the condition value
+            stmt.setInt(index, conditionValue);
             return stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
