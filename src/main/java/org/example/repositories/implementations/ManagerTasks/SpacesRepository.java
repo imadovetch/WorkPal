@@ -108,23 +108,23 @@ public class SpacesRepository extends Dao {
     public static void runTest() {
         SpacesRepository spacesRepo = new SpacesRepository();
 
-        System.out.println("Creating space:");
-        int createResult = spacesRepo.createSpace("radio", "Meeting Room", "A cozy and comfortable workspace.");
-        System.out.println("Create result: " + createResult);
-
-        System.out.println("\nFetching manager spaces:");
-        spacesRepo.getManagerSpaces();
-
-        System.out.println("\nModifying space:");
-        int modifyResult = spacesRepo.modifySpace("9ahwa", "Updated description for cozy workspace.");
-        System.out.println("Modify result: " + modifyResult);
+//        System.out.println("Creating space:");
+//        int createResult = spacesRepo.createSpace("radio", "Meeting Room", "A cozy and comfortable workspace.");
+//        System.out.println("Create result: " + createResult);
+//
+//        System.out.println("\nFetching manager spaces:");
+//        spacesRepo.getManagerSpaces();
+//
+//        System.out.println("\nModifying space:");
+//        int modifyResult = spacesRepo.modifySpace("9ahwa", "Updated description for cozy workspace.");
+//        System.out.println("Modify result: " + modifyResult);
 
 //        System.out.println("\nDeleting space:");
 //        int deleteResult = spacesRepo.deleteSpace("Cozy Corner");
 //        System.out.println("Delete result: " + deleteResult);
 
         System.out.println("\nAssigning service to space:");
-        int assignServiceResult = spacesRepo.assignService(13, 5); // Example spaceId and serviceId
+        int assignServiceResult = spacesRepo.assignService(18, 5); // Example spaceId and serviceId
         System.out.println("Assign service result: " + assignServiceResult);
     }
 

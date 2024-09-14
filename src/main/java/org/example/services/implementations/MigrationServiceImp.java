@@ -84,6 +84,11 @@ public class MigrationServiceImp implements MigrationServiceInterface {
                             "userid INT NOT NULL, " +
                             "spaceid INT NOT NULL); " +
 
+                            "CREATE TABLE IF NOT EXISTS HateServices (" +
+                            "id SERIAL PRIMARY KEY, " +
+                            "userid INT NOT NULL, " +
+                            "serviceid INT NOT NULL); " +
+
                             "CREATE TABLE IF NOT EXISTS EspaceServices (" +
                             "id SERIAL PRIMARY KEY, " +
                             "spaceId INT NOT NULL, " +

@@ -14,7 +14,7 @@ public class Main {
         // to see how IntelliJ IDEA suggests fixing it.
         System.out.printf("Hello and welcome!");
 
-
+    new MigrationServiceImp().migrateAllTables();
     try{
 
        UserRepositoryImp userRepository = new UserRepositoryImp();

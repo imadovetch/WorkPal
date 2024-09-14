@@ -60,7 +60,54 @@ public class ServiceRepository extends Dao {
             return false;
         }
     }
+    public  void ShowspaceServices(int spaceid){
+        try {
+            List<HashMap<String, Object>> reservations = fetchData("EspaceServices", "spaceid", spaceid);
 
+            if (reservations.isEmpty()) {
+                System.out.println("No results found.");
+                return;
+            }
+
+            System.out.println("Reservation Details:");
+
+            for (HashMap<String, Object> reservation : reservations) {
+
+                int serviceid = (int) reservation.get("serviceid");
+
+
+                List<HashMap<String, Object>> spaceDetails = fetchData("Services", "id", serviceid);
+
+                if (!spaceDetails.isEmpty()) {
+                    HashMap<String, Object> space = spaceDetails.get(0);
+
+
+                    System.out.println("Reservation ID: " + reservation.get("id"));
+                    System.out.println("decription on: " + space.get("description"));
+                    System.out.println("service Name: " + space.get("name"));
+
+                    System.out.println("----------------------------------");
+                } else {
+                    System.out.println("Space details not found for space ID: " + serviceid);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error fetching manager spaces: " + e.getMessage());
+        }
+    }
+
+    public void hateService(int serviceid){
+        try{
+            HashMap<String, Object> data = new HashMap<>();
+
+            data.put("userid", User.Main.getId());
+            data.put("serviceid", serviceid);
+
+            insertData("HateServices", data);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
     public static void main(String[] args) {
         ServiceRepository serviceRepo = new ServiceRepository();
 

@@ -1,5 +1,9 @@
 package org.example.GUI.UserMainUI;
 
+import org.example.repositories.implementations.ManagerTasks.ServiceRepository;
+import org.example.repositories.implementations.UserTasks.FavorisRepository;
+import org.example.services.implementations.Helpers;
+
 import java.util.Scanner;
 
 public class ManageSubscriptionsUI {
@@ -35,19 +39,33 @@ public class ManageSubscriptionsUI {
     }
 
     private void chooseSubscriptionPlan() {
-        System.out.println("Choosing a subscription plan...");
-        String reservationName = scanner.nextLine();
-
+        System.out.println("Choosing a Spaceid...");
+        new Helpers().ShowData("Espace");
+        int spaceid = getIntInput();
+        new ServiceRepository().ShowspaceServices(spaceid);
         // Logic to choose and subscribe to a plan
     }
 
     private void renewOrUpdateSubscription() {
-        System.out.println("Renewing or updating subscription...");
+        System.out.println("show favoris...");
+        new FavorisRepository().showFavoris();
         // Logic to renew or update the subscription
     }
 
     private void cancelSubscription() {
-        System.out.println("Canceling subscription...");
+        System.out.println("cancel service by id...");
+        int serviceid = getIntInput();
+        new ServiceRepository().hateService(serviceid);
         // Logic to cancel a subscription
+    }
+    private int getIntInput() {
+        while (true) {
+            try {
+                System.out.print("Enter a number: ");
+                return Integer.parseInt(scanner.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+            }
+        }
     }
 }
