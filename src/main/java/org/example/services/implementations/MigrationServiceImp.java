@@ -53,6 +53,7 @@ public class MigrationServiceImp implements MigrationServiceInterface {
                             "creatorid INT NOT NULL, " +
                             "description VARCHAR(255) NOT NULL, " +
                             "name VARCHAR(255) NOT NULL UNIQUE, " +
+                            "date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
                             "CONSTRAINT fk_creator FOREIGN KEY (creatorid) REFERENCES managers(id) ON DELETE CASCADE, " +  // Corrected foreign key reference
                             "CONSTRAINT fk_type FOREIGN KEY (typeid) REFERENCES Espacetypes(id) ON DELETE CASCADE); " +
 
@@ -70,6 +71,18 @@ public class MigrationServiceImp implements MigrationServiceInterface {
                             "name VARCHAR(255) NOT NULL UNIQUE, " +
                             "price VARCHAR(255) NOT NULL, " +
                             "CONSTRAINT fk_space FOREIGN KEY (spaceId) REFERENCES Espace(id) ON DELETE CASCADE); " +
+
+                            "CREATE TABLE IF NOT EXISTS Reservations (" +
+                            "id SERIAL PRIMARY KEY, " +
+                            "userid INT NOT NULL, " +
+                            "spaceid INT NOT NULL, " +
+                            "type VARCHAR(255) , " +
+                            "abonnmentid INT ); " +
+
+                            "CREATE TABLE IF NOT EXISTS Favoris (" +
+                            "id SERIAL PRIMARY KEY, " +
+                            "userid INT NOT NULL, " +
+                            "spaceid INT NOT NULL); " +
 
                             "CREATE TABLE IF NOT EXISTS EspaceServices (" +
                             "id SERIAL PRIMARY KEY, " +

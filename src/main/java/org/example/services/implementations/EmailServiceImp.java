@@ -6,8 +6,8 @@ import javax.mail.internet.*;
 public class EmailServiceImp {
 
 
-        public static void main(String[] args) {
-            String to = "imadbpro63@gmail.com";
+        public static void main(String to ,String content) {
+
             String from = "ibouderoua63@gmail.com";
             String host = "smtp.gmail.com";
 
@@ -20,7 +20,7 @@ public class EmailServiceImp {
 
             Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
                 protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication("ibouderoua63@gmail.com", "ogdwpnrmuteilnyl"); // your password
+                    return new PasswordAuthentication("ibouderoua63@gmail.com", "ogdwpnrmuteilnyl");
                 }
             });
 
@@ -30,8 +30,8 @@ public class EmailServiceImp {
                 MimeMessage message = new MimeMessage(session);
                 message.setFrom(new InternetAddress(from));
                 message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-                message.setSubject("Test Email from Java");
-                message.setText("Hello, this is a test email sent from Java using Gmail!");
+                message.setSubject("Email from Java");
+                message.setText(content);
 
                 Transport.send(message);
                 System.out.println("Email sent successfully!");

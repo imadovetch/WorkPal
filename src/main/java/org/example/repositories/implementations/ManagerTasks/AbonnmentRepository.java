@@ -6,16 +6,23 @@ import org.example.services.implementations.Helpers;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 public class AbonnmentRepository extends Dao {
 
     private Helpers helper = new Helpers();
+    private static final Pattern PRICE_PATTERN = Pattern.compile("^\\d+(\\.\\d{2})?$"); // Price validation regex
 
     public int createAbonnment(String name, String description, String price, int spaceId) {
 
         Optional<String> validSpace = helper.checkValidity("Espace", spaceId);
         if (!validSpace.isPresent()) {
             System.out.println("Error: The space with ID " + spaceId + " does not exist.");
+            return -1;
+        }
+
+        if (!isValidPrice(price)) {
+            System.out.println("Error: The price format is invalid. Please provide a valid price.");
             return -1;
         }
 
@@ -58,12 +65,16 @@ public class AbonnmentRepository extends Dao {
         }
     }
 
+    private boolean isValidPrice(String price) {
+        return PRICE_PATTERN.matcher(price).matches();
+    }
+
     public static void runTests() {
         AbonnmentRepository abonnmentRepo = new AbonnmentRepository();
 
         // Test creating an abonnment
         System.out.println("Creating abonnment:");
-        int createResult = abonnmentRepo.createAbonnment("Gold Membership", "Premium access to all facilities.", "100.00", 8);
+        int createResult = abonnmentRepo.createAbonnment("Gold Membekrship", "Premium access to all facilities.", "100.00", 15);
         System.out.println("Create result: " + createResult);
 
         // Test fetching abonnments
@@ -71,11 +82,11 @@ public class AbonnmentRepository extends Dao {
         abonnmentRepo.getManagerAbonnments();
 
         // Test deleting an abonnment
-        System.out.println("Deleting abonnment:");
-        int deleteResult = abonnmentRepo.deleteAbonnment("Gold Membership");
-        System.out.println("Delete result: " + deleteResult);
-
-        // Verify deletion
+//        System.out.println("Deleting abonnment:");
+//        int deleteResult = abonnmentRepo.deleteAbonnment("Gold Membership");
+//        System.out.println("Delete result: " + deleteResult);
+//
+//        // Verify deletion
         System.out.println("Fetching abonnments after deletion:");
         abonnmentRepo.getManagerAbonnments();
     }
@@ -83,4 +94,6 @@ public class AbonnmentRepository extends Dao {
     public static void main(String[] args) {
         runTests();
     }
+
+
 }

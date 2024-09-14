@@ -1,38 +1,38 @@
-package org.example.GUI.UserMainUI;
+package org.example.GUI.ManagerUI;
 
 import java.util.Scanner;
 
-public class UserMainUI {
+public class ManagerMainUI {
 
     private static final Scanner scanner = new Scanner(System.in);
 
     public static void display() {
         while (true) {
-            System.out.println("Welcome to the User Dashboard");
+            System.out.println("Welcome to the Manager UI");
             System.out.println("Please select an option:");
-            System.out.println("1. Manage Profile");
-            System.out.println("2. Reserve Spaces");
-            System.out.println("3. View and Manage Reservations");
-            System.out.println("4. Manage Subscriptions");
+            System.out.println("1. Manage Spaces");
+            System.out.println("2. Manage Abonnements");
+            System.out.println("3. Manage Services");
+            System.out.println("4. Manage Reservations");
             System.out.println("5. Exit");
 
             int choice = getChoice();
 
             switch (choice) {
                 case 1:
-                    new ManageProfileUI().display();
+                    new ManageSpacesUI().display();
                     break;
                 case 2:
-                    new ReserveSpacesUI().display();
+                    new ManageAbonnementsUI().display();
                     break;
                 case 3:
-                    new ManageReservationsUI().display();
+                    new ManageServicesUI().display();
                     break;
                 case 4:
-                    new ManageSubscriptionsUI().display();
+                    new ManageReservationsUI().display();
                     break;
                 case 5:
-                    System.out.println("Exiting User Dashboard...");
+                    System.out.println("Exiting Manager UI...");
                     return; // Properly exit
                 default:
                     System.out.println("Invalid choice. Please try again.");

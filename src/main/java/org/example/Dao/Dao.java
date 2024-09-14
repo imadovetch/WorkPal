@@ -33,9 +33,7 @@ public class Dao {
             if (conditionValue != null) {
                 if (!conditionColumn.contains("creatorid")) {
                     stmt.setString(1, conditionValue);
-                    System.out.println("Setting condition value as string...");
                 } else {
-                    System.out.println("Setting condition value as integer...");
                     stmt.setInt(1, User.Main.getId());
                 }
             }
@@ -144,5 +142,36 @@ public class Dao {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    // custom
+    public List<HashMap<String, Object>> fetchSubscriptionsBySpaceName(String spaceName) {
+        List<HashMap<String, Object>> resultDataList = new ArrayList<>();
+        String query = "SELECT a.* " +
+                "FROM Abonnements a " +
+                "JOIN Espaces e ON a.space_id = e.id " +
+                "WHERE e.name = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, spaceName);
+
+            ResultSet rs = stmt.executeQuery();
+            ResultSetMetaData metaData = rs.getMetaData();
+            int columnCount = metaData.getColumnCount();
+
+            while (rs.next()) {
+                HashMap<String, Object> rowData = new HashMap<>();
+                for (int i = 1; i <= columnCount; i++) {
+                    String columnName = metaData.getColumnName(i);
+                    Object columnValueResult = rs.getObject(i);
+                    rowData.put(columnName, columnValueResult);
+                }
+                resultDataList.add(rowData); // Add each row to the list
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return resultDataList;
     }
 }

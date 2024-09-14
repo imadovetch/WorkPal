@@ -1,13 +1,16 @@
 package org.example.GUI;
 
 
-import org.example.GUI.AdminUI.AdminMainUI;
-import org.example.GUI.MnagerUI.ManagerMainUI;
+import org.example.GUI.ManagerUI.ManagerMainUI;
+import org.example.GUI.UserMainUI.UserMainUI;
 
 public class MainGUI {
         public MainGUI(){
-            ManagerMainUI.display();
-
+           //2 ManagerMainUI.display();
+            UserMainUI.display();
+        }
+        public static void main(String[] args) {
+            new MainGUI();
         }
 
 }
